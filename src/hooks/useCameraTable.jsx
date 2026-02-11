@@ -22,7 +22,10 @@ const filteredData = useMemo(()=>{
      
     setIsLoading(true);
     try{
-        const data = await fetchCameraData();
+        const {data,status} = await fetchCameraData('/fetch/cameras');
+        if(status!='success'){
+          throw new Error("Failed to fetch camera data. Please try again later");
+        }
         setTableData(data);
         console.log(data);
 
