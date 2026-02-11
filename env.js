@@ -1,0 +1,1 @@
+export const BASE_URL = "https://hiring-assignment.wobot.ai/api/v1"
