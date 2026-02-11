@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
+import useCameraTable from "../hooks/useCameraTable";
 
 const DashBoard = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  const { 
+    filteredData,
+    isLoading,
+    error,
+    setFilters,
+    filters } = useCameraTable();
 
-export default DashBoard
+  return <div></div>;
+};
+
+export default DashBoard;

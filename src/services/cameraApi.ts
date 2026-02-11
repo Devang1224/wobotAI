@@ -1,6 +1,6 @@
 import { BASE_URL } from "../../env";
 
-export const fetchTableData = async()=>{
+export const fetchCameraData = async()=>{
     try{
         const response = await fetch(`${BASE_URL}/fetch/cameras`,{
             method:"GET",

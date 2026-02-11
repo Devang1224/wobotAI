@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { fetchTableData } from '../services/tableAPi';
+import { fetchCameraData } from '../services/cameraApi';
 
-const useTableData = () => {
+const useCameraTable = () => {
 
   const [isLoading,setIsLoading] = useState(false);
   const [error,setError] = useState(null);
@@ -11,15 +11,18 @@ const useTableData = () => {
   
   
 const filteredData = useMemo(()=>{
-
+     if(tableData?.length > 0) {
+        return tableData;
+     }
+     return [];
 },[tableData,filters]);
 
 
-  const getTableData = async()=>{
-    
+  const getCameraData = async()=>{
+     
     setIsLoading(true);
     try{
-        const data = await fetchTableData();
+        const data = await fetchCameraData();
         setTableData(data);
         console.log(data);
 
@@ -28,11 +31,11 @@ const filteredData = useMemo(()=>{
        setError(err);
     }finally{
         setIsLoading(false);
-    }
+    } 
   }
   
   useEffect(()=>{
-    getTableData();
+    getCameraData();
   },[])
  
     return {
@@ -45,4 +48,4 @@ const filteredData = useMemo(()=>{
     }  
 }
 
-export default useTableData
+export default useCameraTable
