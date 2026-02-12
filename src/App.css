@@ -161,3 +161,40 @@
   cursor: pointer;
 }
 
+
+
+.dash-pagination{
+  background-color: white;
+  display: flex;
+  justify-content:flex-end;
+  align-items:center;
+  padding:10px;
+  gap:25px;
+}
+
+
+.dash-pagination .dash-pagination-count{
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.dash-pagination select{
+  border:none;
+  color: var(--color-text-secondary);
+}
+
+.dash-pagination button{
+  font-size: 20px;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  height:fit-content;
+  display: flex;
+  align-items: center;
+}
+
+.dash-pagination .dash-pagination-buttons{
+  display: flex;
+  align-items: center;
+  gap:2px;
+}

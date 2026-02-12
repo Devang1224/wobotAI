@@ -45,6 +45,8 @@ select {
   background-color: white;
   color:black;
   outline:none;
+  cursor:pointer;
+
 
 }
 
