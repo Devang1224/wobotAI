@@ -114,6 +114,7 @@ const useCameraTable = () => {
     setSelectedRows,
     handleDeleteRows,
     tableData,
+
   };
 };
 

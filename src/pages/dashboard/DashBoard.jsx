@@ -18,6 +18,7 @@ import { TiWeatherCloudy } from "react-icons/ti";
 import { BiCabinet } from "react-icons/bi";
 import { formatCameraName } from "../../helpers/formatCameraName";
 import { cameraApi } from "../../services/cameraApi";
+import Loader from "../../components/ui/Loader";
 
 const DashBoard = () => {
   const {
@@ -29,6 +30,7 @@ const DashBoard = () => {
     setSelectedRows,
     handleDeleteRows,
     tableData,
+    isLoading
   } = useCameraTable();
 
   const [activeModal, setActiveModal] = useState(null); // delete,status
@@ -258,11 +260,21 @@ const DashBoard = () => {
                 </Tr>
               ))
             ) : (
-              <Tr>
-                <Td colSpan={columns.length + 1}>
-                  No data found
-                </Td>
-              </Tr>
+              isLoading ? (
+                <Tr>
+                  <Td colSpan={columns.length + 1}>
+                    <div className="placeItemsCenter gap2">
+                      <Loader />
+                    </div>
+                  </Td>
+                </Tr>
+              ) : (
+                <Tr>
+                  <Td colSpan={columns.length + 1}>
+                    No data found
+                  </Td>
+                </Tr>
+              )
             )}
           </Tbody>
         </Table>
