@@ -6,7 +6,14 @@ const useCameraTable = () => {
   const [isLoading,setIsLoading] = useState(false);
   const [error,setError] = useState(null);
   const [tableData,setTableData] = useState(null);
-  const [filters,setFilters] = useState({});
+  const [filters,setFilters] = useState({
+    location:'all',
+    status:'all',
+    search:'',
+    page:1,
+    limit:10,
+
+  });
 
   
   
@@ -26,7 +33,7 @@ const filteredData = useMemo(()=>{
         if(status!='success'){
           throw new Error("Failed to fetch camera data. Please try again later");
         }
-        setTableData(data);
+        setTableData(data?.cameras);
         console.log(data);
 
     }catch(err){

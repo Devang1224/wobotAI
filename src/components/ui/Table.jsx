@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Table = React.forwardRef(({
+ const Table = React.forwardRef(({
     children,
     className="",
     ...props
@@ -16,3 +16,5 @@ export const Table = React.forwardRef(({
     )
 })
 Table.displayName = "Table";
+
+export default Table;
