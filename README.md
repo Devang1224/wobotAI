@@ -1,16 +1,46 @@
-# React + Vite
+# Wobot Camera Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite dashboard for viewing and managing camera records.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Camera table with search and filters (location, status)
+- Pagination with row selection
+- Bulk delete 
+- Status toggle flow
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- Vite
+- React Icons
+- CSS 
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Node.js 18+ (recommended)
+- npm 9+ (or compatible npm with your Node version)
+
+## Setup Instructions
+
+1. Open terminal in the `app` directory:
+   - `cd app`
+2. Install dependencies:
+   - `npm install`
+3. Start development server:
+   - `npm run dev`
+4. Open the URL shown in terminal (usually `http://localhost:5173`)
+
+## Available Scripts
+
+- `npm run dev` - Start Vite dev server
+- `npm run build` - Create production build
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint
+
+## API Configuration
+
+Base API URL is defined in `env.js`:
+
+The API utility currently sends an authorization token from `src/services/cameraApi.ts`.
+If you need to switch environments, update `env.js` and token/header handling accordingly.
