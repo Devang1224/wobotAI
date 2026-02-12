@@ -1,0 +1,22 @@
+.circular-chart{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    position: relative;
+    background-color: var(--color-grey-100);
+}
+.circular-chart-inner{
+    width:calc(100% - 4px);
+    height:calc(100% - 4px);
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    font-size: 12px;
+}

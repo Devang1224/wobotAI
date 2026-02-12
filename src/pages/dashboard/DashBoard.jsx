@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import useCameraTable from "../hooks/useCameraTable";
+import React, { useRef, useState } from "react";
+import "./dashboard.css";
+import useCameraTable from "../../hooks/useCameraTable";
 import { IoSearch } from "react-icons/io5";
 import { GoLocation } from "react-icons/go";
 // import { FaWifi } from "react-icons/fa6";
 import { FaWifi } from "react-icons/fa";
-import Table from "../components/ui/Table";
+import Table, { Tbody, Td, Th, Thead, Tr } from "../../components/ui/Table/Table";
 import { IoBan } from "react-icons/io5";
 import { RiArrowLeftDoubleFill } from "react-icons/ri";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { FaTrashAlt } from "react-icons/fa";
-import ConfirmModal from "../components/ui/ConfirmModal";
+import ConfirmModal from "../../components/ui/ConfirmModal";
+import CircularChart from "../../components/ui/CirculartChart/CircularChart";
+import { TiWeatherCloudy } from "react-icons/ti";
+import { BiCabinet } from "react-icons/bi";
+import { formatCameraName } from "../../helpers/formatCameraName";
+import { cameraApi } from "../../services/cameraApi";
 
 const DashBoard = () => {
   const {
@@ -25,7 +31,9 @@ const DashBoard = () => {
     tableData,
   } = useCameraTable();
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState(null); // delete,status
+  const cameraStatusRef = useRef(null); // { id, status }
+  
 
   const columns = [
     {
@@ -86,19 +94,35 @@ const DashBoard = () => {
 
   const onClickDeleteRows = () => {
     if (selectedRows.length === 0) return;
-    setIsDeleteModalOpen(true);
+    setActiveModal("delete");
   };
-
   const onConfirmDeleteRows = () => {
     handleDeleteRows();
-    setIsDeleteModalOpen(false);
+    setActiveModal(null);
   };
 
-  const onClickCameraStatus = (id, status) => {
-    try {
-    } catch (err) {
+  const onConfirmChangeStatus = async() => {
+    try{  
+      const tmp = cameraStatusRef.current.id.split("_")[1];
+      const id = parseInt(tmp, 10);
+      const resp = await cameraApi('/update/camera/status',{
+        method: "POST",
+        body: {
+          id: id,
+          status: cameraStatusRef.current.status,
+        },
+      });
+
+      console.log("resp", resp);
+    }catch(err){
       console.log(err);
+    }finally{
+      setActiveModal(null);
     }
+  };
+  const onClickCameraStatus = (id, status) => {
+    cameraStatusRef.current = { id, status };
+    setActiveModal("status");
   };
 
   return (
@@ -156,48 +180,73 @@ const DashBoard = () => {
       {/* table */}
       <div className="dash-table">
         <Table>
-          <thead className="table-head">
-            <th className="table-head-item">
-              <input
-                type="checkbox"
-                className="table-checkbox"
-                checked={checkAllRowsSelected()}
-                onChange={handleSelectAllRows}
-              />
-            </th>
-            {columns.map((column) => (
-              <th className="table-head-item" key={column.id}>
-                {column.label}
-              </th>
-            ))}
-          </thead>
-          <tbody>
+          <Thead>
+            <Tr>
+              <Th>
+                <input
+                  type="checkbox"
+                  className="table-checkbox"
+                  checked={checkAllRowsSelected()}
+                  onChange={handleSelectAllRows}
+                />
+              </Th>
+              <Th>NAME</Th>
+              <Th>HEALTH</Th>
+              <Th>LOCATION</Th>
+              <Th>RECORDER</Th>
+              <Th>TASKS</Th>
+              <Th className="textCenter">STATUS</Th>
+              <Th>ACTIONS</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             {filteredData?.length > 0 ? (
-              filteredData.map((item, index) => (
-                <tr className="table-row" key={item.id}>
-                  <td className="table-cell">
+              filteredData.map((item) => (
+                <Tr key={item.id}>
+                  <Td>
                     <input
                       type="checkbox"
                       className="table-checkbox"
                       checked={selectedRows.includes(item.id)}
                       onChange={(e) => handleSelectRow(e, item.id)}
                     />
-                  </td>
-                  <td className="table-cell">
-                    Camera {index + 1 + (filters.page - 1) * filters.limit}{" "}
-                  </td>
-                  <td className="table-cell">{item.health}</td>
-                  <td className="table-cell">{item.location}</td>
-                  <td className="table-cell">{item.name}</td>
-                  <td className="table-cell">3 Tasks</td>
-                  <td className="table-cell table-status">
-                    <button className={`table-status-btn ${item.status.toLowerCase() === "active" ? "active-btn" : "inactive-btn"}`} 
+                  </Td>
+                  <Td>
+                    <div>
+                       <div className="table-cell-name">
+                          <div className={`active_dot ${item.status.toLowerCase() === "active" ? "active_dot" : "inactive_dot"}`}></div>
+                           <p>{formatCameraName(item.id)}</p>
+                       </div>
+                      <p className="table-cell-email">{item.email ? item.email : 'N/A'}</p>
+                    </div>
+                    
+                    
+                  </Td>
+                  <Td>
+                    <div className="table-cell-chart">
+                      <div className="placeItemsCenter gap2">
+                        <TiWeatherCloudy size={20} color='var(--color-grey-200)'/>
+                         <CircularChart percentage={item.cloudPercentage} color={`${item.cloudPercentage > 50 ? "var(--color-green-300)" : "var(--color-orange-100)"}`}>B</CircularChart>
+                      </div>
+                      <div className="placeItemsCenter gap2">
+                        <BiCabinet size={16} color='var(--color-grey-200)'/>
+                        <CircularChart percentage={item.dbPercentage} color={`${item.dbPercentage > 50 ? "var(--color-green-300)" : "var(--color-orange-100)"}`}>A</CircularChart>
+                      </div>
+                    </div>
+                  </Td>
+                  <Td>{item.location ? item.location : 'N/A'}</Td>
+                  <Td>{item.name ? item.name : 'N/A'}</Td>
+                  <Td>{item.tasks ? `${item.tasks} Tasks`: 'N/A'}</Td>
+                  <Td className="table-status">
+                    <button
+                      className={`table-status-btn ${item.status.toLowerCase() === "active" ? "active-btn" : "inactive-btn"}`}
                       onClick={() => onClickCameraStatus(item.id, item.status)}
-                    > 
-                      {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                    >
+                      {item.status.charAt(0).toUpperCase() +
+                        item.status.slice(1)}
                     </button>
-                  </td>
-                  <td className="table-cell ">
+                  </Td>
+                  <Td>
                     {selectedRows.includes(item.id) ? (
                       <button className="trash-btn" onClick={onClickDeleteRows}>
                         <FaTrashAlt className="table-icon" />
@@ -205,17 +254,17 @@ const DashBoard = () => {
                     ) : (
                       <IoBan className="table-icon" />
                     )}
-                  </td>
-                </tr>
+                  </Td>
+                </Tr>
               ))
             ) : (
-              <tr className="table-row">
-                <td className="table-cell" colSpan={columns.length + 1}>
+              <Tr>
+                <Td colSpan={columns.length + 1}>
                   No data found
-                </td>
-              </tr>
+                </Td>
+              </Tr>
             )}
-          </tbody>
+          </Tbody>
         </Table>
       </div>
 
@@ -266,15 +315,25 @@ const DashBoard = () => {
       </div>
 
       <ConfirmModal
-        isOpen={isDeleteModalOpen}
+        isOpen={activeModal === "delete"}
         title="Delete selected cameras?"
         message={`This will delete ${selectedRows.length} selected ${
           selectedRows.length === 1 ? "camera" : "cameras"
         }.`}
         confirmText="Delete"
         cancelText="Cancel"
-        onClose={() => setIsDeleteModalOpen(false)}
+        onClose={() => setActiveModal(false)}
         onConfirm={onConfirmDeleteRows}
+      />
+
+      <ConfirmModal
+        isOpen={activeModal === "status"}
+        title="Change status of selected cameras?"
+        message={`This will change the status `}
+        confirmText="Change"
+        cancelText="Cancel"
+        onClose={() => setActiveModal(null)}
+        onConfirm={onConfirmChangeStatus}
       />
     </div>
   );

@@ -3,18 +3,16 @@ import { BASE_URL } from "../../env";
 export const cameraApi = async(
     url,
     options,
-    method="GET",
-    body
 )=>{
     try{
         const response = await fetch(`${BASE_URL}${url}`,{
-            method:method,
+            method:options?.method || "GET",
             headers:{
                 'Content-Type':"application/json",
                 'Authorization':'Bearer 4ApVMIn5sTxeW7GQ5VWeWiy',
                 ...options?.headers
             },
-            body:body ? JSON.stringify(body) : undefined,
+            body:options?.body ? JSON.stringify(options?.body) : undefined,
             ...options
         });
         const data  = await response.json();

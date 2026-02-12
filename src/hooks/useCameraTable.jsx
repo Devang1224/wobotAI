@@ -73,7 +73,23 @@ const useCameraTable = () => {
       if (status != "success") {
         throw new Error("Failed to fetch camera data. Please try again later");
       }
-      setTableData(data?.cameras);
+// some data is missing from the api response, so i am adding it manually
+       const updatedData  = data?.cameras?.map((item)=>{
+            
+        const cloudPercentage = Math.floor(Math.random() * 100);
+        const dbPercentage = Math.floor(Math.random() * 100);
+        const email = `${item.id}@example.com`;
+        const tasks = Math.floor(Math.random() * 10);
+        return {
+          ...item,
+          cloudPercentage,
+          dbPercentage,
+          email,
+          tasks,
+        }
+       })
+
+      setTableData(updatedData);
       console.log(data);
     } catch (err) {
       console.log(err);

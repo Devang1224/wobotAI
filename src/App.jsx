@@ -1,6 +1,6 @@
 import './App.css'
 import Logo from './components/Logo'
-import DashBoard from './pages/DashBoard'
+import DashBoard from './pages/dashboard/DashBoard'
 
 function App() {
 

@@ -19,14 +19,17 @@
 
   --color-text-primary: #111111;
   --color-text-secondary: #545454;
-  --color-text-placeholder: #A0A0A0;
   --color-text-tertiary: #7E7E7E;
 
   --color-green-100: #E5F4EF;
   --color-green-300: #019263;
 
   --color-grey-100:#F0F0F0;
+  --color-grey-200:#A0A0A0;
   --color-grey-300:#545454;
+
+  --color-orange-100: #FF7E17;
+
 
  
 
@@ -59,7 +62,7 @@ select {
 
 body {
   margin: 0;
-  min-width: 280px;
+  min-width: 1000px;
   min-height: 100vh;
   color: var(--color-text-primary);
 
@@ -78,6 +81,21 @@ button {
 }
 table{
   border-collapse: collapse;
+}
+
+
+.textCenter{
+  text-align: center !important;
+}
+
+.placeItemsCenter{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gap2{
+  gap:2px;
 }
 
 
